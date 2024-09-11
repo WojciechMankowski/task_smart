@@ -9,15 +9,11 @@ export interface InputProps {
   type: string;
   className: string;
   name: string;
-  placeholder: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-export interface UserProps {
-  user: User;
-  key: number;
-}
 export interface UsersProps {
   users: User[];
 }
@@ -36,6 +32,5 @@ export interface Search {
   currentlyChangedField: string;
 }
 export interface FilteredProps {
-  searchTerm: Search;
-  setSearchTerm: React.Dispatch<React.SetStateAction<Search>>;
+  onFilterChange: (field: keyof User | string, value: string) => void;
 }

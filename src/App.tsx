@@ -1,47 +1,45 @@
-import React, { useState, useEffect } from "react";
-import connectAPI from "./helper/connect";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import UserTable from "./view/UserTable";
-import User from "./types/User";
+import { fetchUsers } from "./redux/action/actionApp";
+import { RootState } from "./redux/reducer/rootReducer";
+import { AppDispatch } from "./store/store";
 import ViewFilter from "./view/ViewFilter";
 import "./assets/main.css";
-import searchUsers from "./helper/searchUsers";
+import User from "./types/User";
 
 const App: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [searchTerm, setSearchTerm] = useState({
-    id: 0,
-    name: "",
-    username: "",
-    email: "",
-    phone: "",
-    currentlyChangedField: ""
-  });
+  const dispatch = useDispatch<AppDispatch>();
+  const { isLoading, error, filteredUsers } = useSelector((state: RootState) => state.users);
+  const [filters, setFilters] = useState<Partial<User>>({});
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userData = await connectAPI();
-        setUsers(userData);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
-    fetchData();
-  }, []);
+  const handleFilterChange = (field: keyof User | string, value: string) => {
+    setFilters(prev => ({ ...prev, [field]: value }));
+  };
 
-  useEffect(() => {
-    const data = searchUsers(users, searchTerm)
-    console.log(data)
-    setUsers(data)
-    
-  }, [searchTerm]);
+  const filteredUserList = filteredUsers.filter(user =>
+    Object.entries(filters).every(([key, value]) =>
+      user[key as keyof User].toString().toLowerCase().includes(value.toLowerCase())
+    )
+  );
+
+  if (isLoading) {
+    return <div>Ładowanie...</div>;
+  }
+
+  if (error) {
+    return <div>Wystąpił błąd: {error}</div>;
+  }
 
   return (
-    <div className="">
-      <ViewFilter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <UserTable users={users} />
-    </div>
+    <>
+      <ViewFilter onFilterChange={handleFilterChange} />
+      <UserTable users={filteredUserList} />
+    </>
   );
 };
 
