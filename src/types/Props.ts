@@ -24,7 +24,7 @@ export interface LabelProps {
   htmlFor: string;
 }
 export interface Search {
-  id: number;
+  id: string;
   name: string;
   username: string;
   email: string;

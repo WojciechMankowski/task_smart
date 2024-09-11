@@ -1,7 +1,7 @@
 import React from 'react';
-import { UserProps } from '../types/Props'; 
+import User from '../types/User';
 
-const UserRow: React.FC<UserProps> = ({ user }) => {
+const UserRow: React.FC<{user: User}> = ({ user }) => {
   return (
     <tr key={user.id} className="border-b hover:bg-gray-50">
       <td className="py-2 px-4">{user.id}</td>
