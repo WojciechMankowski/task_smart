@@ -1,7 +1,7 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
-import  User  from '../../types/User';
+import User from '../../types/User';
 import { Search } from '../../types/Props';
-import { fetchUsers, filterUsers, resetFilters, deleteUser } from '../action/actionApp';
+import { fetchUsers, filterUsers, resetFilters } from '../action/actionApp';
 
 interface UserState {
   users: User[];
@@ -17,7 +17,7 @@ const initialState: UserState = {
   isLoading: false,
   error: null,
   filters: {
-    id: 0,
+    id: "0",
     name: '',
     username: '',
     email: '',
@@ -39,27 +39,26 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(fetchUsers.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.error.message || 'Wystąpił błąd podczas pobierania użytkowników';
+      state.error = action.error.message || 
+      'Wystąpił błąd podczas pobierania użytkowników';
     })
     .addCase(filterUsers, (state, action: PayloadAction<Search>) => {
       state.filters = action.payload;
       state.filteredUsers = state.users.filter((user) => {
         return (
-          (action.payload.id === 0 || user.id === action.payload.id) &&
+          (
+            action.payload.id === "0" || user.id.includes(action.payload.id)
+          ) &&
           user.name.toLowerCase().includes(action.payload.name.toLowerCase()) &&
           user.username.toLowerCase().includes(action.payload.username.toLowerCase()) &&
           user.email.toLowerCase().includes(action.payload.email.toLowerCase()) &&
-          user.phone.includes(action.payload.phone)
+          user.phone.includes(action.payload.phone) 
         );
       });
     })
     .addCase(resetFilters, (state) => {
       state.filters = initialState.filters;
       state.filteredUsers = state.users;
-    })
-    .addCase(deleteUser, (state, action: PayloadAction<number>) => {
-      state.users = state.users.filter(user => user.id !== action.payload);
-      state.filteredUsers = state.filteredUsers.filter(user => user.id !== action.payload);
     });
 });
 

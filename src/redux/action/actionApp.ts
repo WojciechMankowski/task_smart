@@ -13,10 +13,9 @@ export const fetchUsers = createAsyncThunk(
 
 export const filterUsers = createAction<Search>('users/filter');
 
-// Dodajemy nową akcję resetFilters
+
 export const resetFilters = createAction('users/resetFilters');
 
-// Dodajemy nową akcję do usuwania użytkownika
-export const deleteUser = createAction<number>('users/deleteUser');
+
 
 
