@@ -3,11 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Label from "../components/Label";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import {
-  filterUsers,
-  resetFilters,
-  fetchUsers,
-} from "../redux/action/actionApp";
+import { filterUsers } from "../redux/action/actionApp";
 import { RootState } from "../redux/reducer/rootReducer";
 import { AppDispatch } from "../store/store";
 import { FilteredProps } from "../types/Props";
@@ -22,6 +18,7 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
       | React.KeyboardEvent<HTMLInputElement>
   ) => {
     const target = event.target as HTMLInputElement;
+
     const newSearchTerm = {
       ...searchTerm,
       [target.name]: target.value,
@@ -30,24 +27,15 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
     onFilterChange(target.name, target.value);
   };
 
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const target = event.target as HTMLInputElement;
-    if (event.key === "Backspace" || event.key === "Delete") {
-      const newSearchTerm = { ...searchTerm, [target.name]: "" };
-      dispatch(filterUsers(newSearchTerm));
-      onFilterChange(target.name, "");
-    }
-  };
-
   const handleReset = () => {
-    dispatch(resetFilters());
-    dispatch(fetchUsers());
-    onFilterChange("", "");
+    location.reload();
   };
 
   return (
     <div className="container mx-auto mt-6 max-w-4xl p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-2xl font-bold text-gray-700 mb-6 flex items-center justify-center">Search for user</h2>
+      <h2 className="text-2xl font-bold text-gray-700 mb-6 flex items-center justify-center">
+        Search for user
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div>
           <Label
@@ -61,7 +49,6 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
             name="id"
             value={searchTerm.id || ""}
             onChange={handleSearch}
-            onKeyUp={handleKeyUp}
           />
         </div>
         <div>
@@ -76,7 +63,6 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
             name="name"
             value={searchTerm.name || ""}
             onChange={handleSearch}
-            onKeyUp={handleKeyUp}
           />
         </div>
         <div>
@@ -91,7 +77,6 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
             name="username"
             value={searchTerm.username || ""}
             onChange={handleSearch}
-            onKeyUp={handleKeyUp}
           />
         </div>
         <div>
@@ -106,7 +91,6 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
             name="email"
             value={searchTerm.email || ""}
             onChange={handleSearch}
-            onKeyUp={handleKeyUp}
           />
         </div>
         <div>
@@ -121,7 +105,6 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
             name="phone"
             value={searchTerm.phone || ""}
             onChange={handleSearch}
-            onKeyUp={handleKeyUp}
           />
         </div>
       </div>
