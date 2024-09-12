@@ -17,7 +17,7 @@ const initialState: UserState = {
   isLoading: false,
   error: null,
   filters: {
-    id: "0",
+    id: '',
     name: '',
     username: '',
     email: '',
@@ -47,7 +47,7 @@ const userReducer = createReducer(initialState, (builder) => {
       state.filteredUsers = state.users.filter((user) => {
         return (
           (
-            action.payload.id === "0" || user.id.includes(action.payload.id)
+            action.payload.id === "" || user.id.toString().includes(action.payload.id)
           ) &&
           user.name.toLowerCase().includes(action.payload.name.toLowerCase()) &&
           user.username.toLowerCase().includes(action.payload.username.toLowerCase()) &&
