@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserTable from "./view/UserTable";
 import { fetchUsers } from "./redux/action/actionApp";
@@ -17,26 +17,26 @@ const App: React.FC = () => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  const handleFilterChange = (field: keyof User | string, value: string) => {
+  const handleFilterChange = (field: keyof User, value: string) => {
     setFilters(prev => ({ ...prev, [field]: value }));
   };
 
-  const filteredUserList = filteredUsers.filter(user =>
-    Object.entries(filters).every(([key, value]) =>
-      user[key as keyof User].toString().toLowerCase().includes(value.toLowerCase())
-    )
+  const filteredUserList = useMemo(() => 
+    filteredUsers.filter(user =>
+      Object.entries(filters).every(([key, value]) =>
+        user[key as keyof User].toString().toLowerCase().includes((value || '').toLowerCase())
+      )
+    ), [filteredUsers, filters]
   );
 
-  if (isLoading) {
-    return <div>Ładowanie...</div>;
-  }
-
-  if (error) {
-    return <div>Wystąpił błąd: {error}</div>;
-  }
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>An error occurred: {error}</div>;
 
   return (
     <>
+      <h2 className="text-4xl font-extrabold dark:text-white text-center p-8">
+        Administration Panel - Users
+      </h2>
       <ViewFilter onFilterChange={handleFilterChange} />
       <UserTable users={filteredUserList} />
     </>

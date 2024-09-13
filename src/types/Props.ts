@@ -11,7 +11,7 @@ export interface InputProps {
   name: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onClick?: (valueButtons: string, targetName: string) => void
 }
 
 export interface UsersProps {
@@ -23,14 +23,12 @@ export interface LabelProps {
   content: string;
   htmlFor: string;
 }
-export interface Search {
+
+export interface Search extends Omit<User, 'id'> {
   id: string;
-  name: string;
-  username: string;
-  email: string;
-  phone: string;
   currentlyChangedField: string;
 }
+
 export interface FilteredProps {
-  onFilterChange: (field: keyof User | string, value: string) => void;
+  onFilterChange: (field: keyof User, value: string) => void;
 }

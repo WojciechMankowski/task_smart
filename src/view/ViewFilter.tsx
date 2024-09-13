@@ -7,112 +7,59 @@ import { filterUsers } from "../redux/action/actionApp";
 import { RootState } from "../redux/reducer/rootReducer";
 import { AppDispatch } from "../store/store";
 import { FilteredProps } from "../types/Props";
+import User from "../types/User";
 
 const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const searchTerm = useSelector((state: RootState) => state.users.filters);
+  const filters = useSelector((state: RootState) => state.users.filters);
 
-  const handleSearch = (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    const target = event.target as HTMLInputElement;
-
-    const newSearchTerm = {
-      ...searchTerm,
-      [target.name]: target.value,
-    };
-    dispatch(filterUsers(newSearchTerm));
-    onFilterChange(target.name, target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    const newFilters = { ...filters, [name]: value };
+    dispatch(filterUsers(newFilters));
+    onFilterChange(name as keyof User, value);
   };
 
   const handleReset = () => {
-    location.reload();
+    window.location.reload();
   };
 
+  const inputFields: Array<{ key: keyof User; label: string; type: string }> = [
+    { key: "id", label: "ID", type: "text" },
+    { key: "name", label: "Name", type: "text" },
+    { key: "username", label: "Username", type: "text" },
+    { key: "email", label: "Email", type: "email" },
+    { key: "phone", label: "Phone", type: "tel" },
+  ];
+
   return (
-    <div className="container mx-auto mt-6 max-w-4xl p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-2xl font-bold text-gray-700 mb-6 flex items-center justify-center">
-        Search for user
+    <div className="container mx-auto my-10 max-w-4xl p-6 shadow-2xl rounded-md border border-gray-300">
+      <h2 className="text-2xl font-bold mb-6 text-center">
+        Search for User
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div>
-          <Label
-            className="block text-sm font-semibold mb-2 text-gray-600"
-            content="Id"
-            htmlFor="id"
-          />
-          <Input
-            type="text"
-            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            name="id"
-            value={searchTerm.id || ""}
-            onChange={handleSearch}
-          />
-        </div>
-        <div>
-          <Label
-            className="block text-sm font-semibold mb-2 text-gray-600"
-            content="Name"
-            htmlFor="name"
-          />
-          <Input
-            type="text"
-            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            name="name"
-            value={searchTerm.name || ""}
-            onChange={handleSearch}
-          />
-        </div>
-        <div>
-          <Label
-            className="block text-sm font-semibold mb-2 text-gray-600"
-            content="User name"
-            htmlFor="username"
-          />
-          <Input
-            type="text"
-            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            name="username"
-            value={searchTerm.username || ""}
-            onChange={handleSearch}
-          />
-        </div>
-        <div>
-          <Label
-            className="block text-sm font-semibold mb-2 text-gray-600"
-            content="E-mail"
-            htmlFor="email"
-          />
-          <Input
-            type="email"
-            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            name="email"
-            value={searchTerm.email || ""}
-            onChange={handleSearch}
-          />
-        </div>
-        <div>
-          <Label
-            className="block text-sm font-semibold mb-2 text-gray-600"
-            content="Phone"
-            htmlFor="phone"
-          />
-          <Input
-            type="tel"
-            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            name="phone"
-            value={searchTerm.phone || ""}
-            onChange={handleSearch}
-          />
-        </div>
+        {inputFields.map(({ key, label, type }) => (
+          <div key={key}>
+            <Label
+              className="block text-sm font-semibold mb-2 text-gray-600"
+              content={label}
+              htmlFor={key}
+            />
+            <Input
+              type={type}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+              name={key}
+              value={filters[key] || ""}
+              onChange={handleChange}
+            />
+          </div>
+        ))}
       </div>
       <div className="flex justify-end mt-6">
         <Button
           className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring focus:border-blue-300"
           onClick={handleReset}
-          content="Wyczyść i odśwież"
+          content="Clear and Refresh"
         />
       </div>
     </div>

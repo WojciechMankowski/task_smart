@@ -1,25 +1,17 @@
 import User from "../types/User";
 import { Search } from "../types/Props";
 
-const searchUsers = (users: User[], searchForm: Search): User[] => {
-  const { currentlyChangedField, ...searchCriteria } = searchForm;
+const searchUsers = (users: User[], { currentlyChangedField, ...searchCriteria }: Search): User[] => {
+  const searchFunctions: Record<keyof Omit<Search, 'currentlyChangedField'>, (user: User) => boolean> = {
+    id: (user) => user.id === searchCriteria.id,
+    name: (user) => user.name.includes(searchCriteria.name),
+    username: (user) => user.username.includes(searchCriteria.username),
+    email: (user) => user.email.includes(searchCriteria.email),
+    phone: (user) => user.phone.includes(searchCriteria.phone),
+  };
 
-  return users.filter((user) => {
-    switch (currentlyChangedField) {
-      case "id":
-        return user.id === searchCriteria.id;
-      case "name":
-        return user.name.includes(searchCriteria.name);
-      case "username":
-        return user.username.includes(searchCriteria.username);
-      case "email":
-        return user.email.includes(searchCriteria.email);
-      case "phone":
-        return user.phone.includes(searchCriteria.phone);
-      default:
-        return true; 
-    }
-  });
+  const searchFunction = searchFunctions[currentlyChangedField as keyof typeof searchFunctions] || (() => true);
+  return users.filter(searchFunction);
 };
 
 export default searchUsers;

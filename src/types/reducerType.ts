@@ -1,13 +1,14 @@
-import User from "./User";
+import  User  from "./User";
 import { Search } from "./Props";
-export interface ActionType {
-    type: string;
-    payload:
-      | { users: User[] }
-      | { searchParams: Search; users: User[] }; 
-  }
-  
-  export interface AppState {
+
+export type ActionType =
+  | { type: string; payload: User[] }
+  | { type: string; payload: Search };
+
+export interface AppState {
     users: User[];
-  }
-  
+    filteredUsers: User[];
+    isLoading: boolean;
+    error: string | null;
+    filters: Search;
+}

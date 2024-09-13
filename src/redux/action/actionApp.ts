@@ -5,15 +5,10 @@ import { Search } from '../../types/Props';
 
 export const fetchUsers = createAsyncThunk(
   'users/fetchUsers',
-  async () => {
-    const users = await connectAPI();
-    return users;
-  }
+  async () => await connectAPI()
 );
 
 export const filterUsers = createAction<Search>('users/filter');
-
-
 export const resetFilters = createAction('users/resetFilters');
 
 

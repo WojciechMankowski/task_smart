@@ -39,22 +39,16 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(fetchUsers.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.error.message || 
-      'Wystąpił błąd podczas pobierania użytkowników';
+      state.error = action.error.message || 'Wystąpił błąd podczas pobierania użytkowników';
     })
     .addCase(filterUsers, (state, action: PayloadAction<Search>) => {
       state.filters = action.payload;
-      state.filteredUsers = state.users.filter((user) => {
-        return (
-          (
-            action.payload.id === "" || user.id.toString().includes(action.payload.id)
-          ) &&
-          user.name.toLowerCase().includes(action.payload.name.toLowerCase()) &&
-          user.username.toLowerCase().includes(action.payload.username.toLowerCase()) &&
-          user.email.toLowerCase().includes(action.payload.email.toLowerCase()) &&
-          user.phone.includes(action.payload.phone) 
-        );
-      });
+      state.filteredUsers = state.users.filter((user) => 
+        Object.entries(action.payload).every(([key, value]) => 
+          key === 'currentlyChangedField' || 
+          (value === '' || user[key as keyof User] .toString().toLowerCase().includes(value.toLowerCase()))
+        )
+      );
     })
     .addCase(resetFilters, (state) => {
       state.filters = initialState.filters;
