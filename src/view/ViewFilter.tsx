@@ -9,7 +9,16 @@ import { AppDispatch } from "../store/store";
 import { FilteredProps } from "../types/Props";
 import User from "../types/User";
 
+const inputFields: Array<{ key: keyof User; label: string; type: string }> = [
+  { key: "id", label: "ID", type: "text" },
+  { key: "name", label: "Name", type: "text" },
+  { key: "username", label: "Username", type: "text" },
+  { key: "email", label: "Email", type: "email" },
+  { key: "phone", label: "Phone", type: "tel" },
+];
+
 const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
+  
   const dispatch = useDispatch<AppDispatch>();
   const filters = useSelector((state: RootState) => state.users.filters);
 
@@ -27,14 +36,6 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
   const handleReset = () => {
     window.location.reload();
   };
-
-  const inputFields: Array<{ key: keyof User; label: string; type: string }> = [
-    { key: "id", label: "ID", type: "text" },
-    { key: "name", label: "Name", type: "text" },
-    { key: "username", label: "Username", type: "text" },
-    { key: "email", label: "Email", type: "email" },
-    { key: "phone", label: "Phone", type: "tel" },
-  ];
 
   return (
     <div className="container mx-auto my-10 max-w-4xl p-6 shadow-2xl rounded-md border border-gray-300">
