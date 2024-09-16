@@ -19,7 +19,11 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
     dispatch(filterUsers(newFilters));
     onFilterChange(name as keyof User, value);
   };
-
+  const onClickOnSuggestion = (suggestion: string, targetName: string) => {
+    const filter = { ...filters, [targetName]: suggestion };
+    dispatch(filterUsers(filter));
+    onFilterChange(targetName as keyof User, suggestion);
+  };
   const handleReset = () => {
     window.location.reload();
   };
@@ -34,9 +38,7 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
 
   return (
     <div className="container mx-auto my-10 max-w-4xl p-6 shadow-2xl rounded-md border border-gray-300">
-      <h2 className="text-2xl font-bold mb-6 text-center">
-        Search for User
-      </h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Search for User</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {inputFields.map(({ key, label, type }) => (
           <div key={key}>
@@ -51,6 +53,7 @@ const ViewFilter: React.FC<FilteredProps> = ({ onFilterChange }) => {
               name={key}
               value={filters[key] || ""}
               onChange={handleChange}
+              onClick={onClickOnSuggestion}
             />
           </div>
         ))}

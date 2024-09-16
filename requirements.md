@@ -1,15 +1,15 @@
 # TODO
 
 - [X]  **Pobranie danych użytkowników z API**
-- [ ]  **Wyświetlanie użytkowników w tabeli**
-- [ ]  **Zaimplementowanie zaawansowanego filtrowania**
-- [ ]  **Zarządzanie stanem aplikacji za pomocą Redux**
+- [X]  **Wyświetlanie użytkowników w tabeli**
+- [X]  **Zaimplementowanie zaawansowanego filtrowania**
+- [X]  **Zarządzanie stanem aplikacji za pomocą Redux**
 - [X]  **Typowanie za pomocą TypeScript**
-- [ ]  **Stylizacja i projekt interfejsu**
-- [ ]  **Testowanie aplikacji**
-- [ ]  **Wdrożenie aplikacji**
-- [ ]  **Publikacja kodu w repozytorium GitHub**
-- [ ]  **Opcjonalnie**: Napisanie opisu napotkanych wyzwań i zastosowanego podejścia
+- [X]  **Stylizacja i projekt interfejsu**
+- [X]  **Testowanie aplikacji**
+- [X]  **Wdrożenie aplikacji**
+- [X]  **Publikacja kodu w repozytorium GitHub**
+- [X]  **Opcjonalnie**: Napisanie opisu napotkanych wyzwań i zastosowanego podejścia
 
 # 
 
